@@ -30,10 +30,17 @@ function getPetByID(req, res) {
   });
 }
 
+function patchOwner(req, res) {
+  owners.update(req.params.ownerID, req.body, (err, data) => {
+    res.status(200).send(`${req.params.ownerID} has been updated!`);
+  });
+}
+
 module.exports = {
   welcome,
   getAllOwners,
   getOwnerByID,
   getOwnersPets,
-  getPetByID
+  getPetByID,
+  patchOwner
 };

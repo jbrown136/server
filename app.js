@@ -6,15 +6,19 @@ const {
   getAllOwners,
   getOwnerByID,
   getOwnersPets,
-  getPetByID
+  getPetByID,
+  patchOwner
 } = require("./controller.js");
 
 app.use(bodyParser.json());
+
 app.get("/api/", welcome);
 app.get("/api/owners/", getAllOwners);
 app.get("/api/owners/:ownerID", getOwnerByID);
 app.get("/api/owners/:ownerID/pets", getOwnersPets);
 app.get("/api/pets/:petID", getPetByID);
+
+app.patch("/api/owners/:ownerID", patchOwner);
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");

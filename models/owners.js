@@ -18,14 +18,26 @@ module.exports = {
     });
   },
   fetchById(id, cb) {
-    fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, (err) => {
-      if(err) cb(null, `${id} does not exist`);
+    fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, err => {
+      if (err) cb(null, `${id} does not exist`);
       fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
-        if(err) console.log("ERROR!");
+        if (err) console.log("ERROR!");
         cb(null, JSON.parse(data));
       });
     });
   },
-  update(id, data, cb) {},
+  update(id, data, cb) {
+    console.log(data);
+    fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, err => {
+      if (err) cb(null, `${id} does not exist`);
+      fs.readFile(`./data/owners/${id}.json`, "utf8", (err, ownerDetails) => {
+        const keys = Object.keys(data);
+        ownerDetails[keys[0]] = data[keys[0]];
+        fs.writeFile(`./data/owners/${id}.json`, ownerDetails, err => {
+          if (err) console.log("oh noooooo");
+        });
+      });
+    });
+  },
   deleteById(id, cb) {}
 };
