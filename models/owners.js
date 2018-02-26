@@ -18,8 +18,12 @@ module.exports = {
     });
   },
   fetchById(id, cb) {
-    fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
-      cb(null, JSON.parse(data));
+    fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, (err) => {
+      if(err) cb(null, `${id} does not exist`);
+      fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
+        if(err) console.log("ERROR!");
+        cb(null, JSON.parse(data));
+      });
     });
   },
   update(id, data, cb) {},

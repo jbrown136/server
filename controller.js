@@ -1,5 +1,5 @@
 const owners = require("./models/owners");
-
+const pets = require("./models/pets");
 function welcome(req, res) {
   res.status(200).send("Welcome to our API");
 }
@@ -16,4 +16,11 @@ function getOwnerByID(req, res) {
   });
 }
 
-module.exports = { welcome, getAllOwners, getOwnerByID };
+function getOwnersPets(req, res) {
+  pets.fetchByOwnerId(req.params.ownerID, (err, data) =>{
+    if (data.length === 0) res.status(404).send(`No pets found for ${req.params.ownerID}`);
+   else res.status(200).send(data);
+  });
+}
+
+module.exports = { welcome, getAllOwners, getOwnerByID, getOwnersPets };
