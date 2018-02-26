@@ -17,10 +17,23 @@ function getOwnerByID(req, res) {
 }
 
 function getOwnersPets(req, res) {
-  pets.fetchByOwnerId(req.params.ownerID, (err, data) =>{
-    if (data.length === 0) res.status(404).send(`No pets found for ${req.params.ownerID}`);
-   else res.status(200).send(data);
+  pets.fetchByOwnerId(req.params.ownerID, (err, data) => {
+    if (data.length === 0)
+      res.status(404).send(`No pets found for ${req.params.ownerID}`);
+    else res.status(200).send(data);
   });
 }
 
-module.exports = { welcome, getAllOwners, getOwnerByID, getOwnersPets };
+function getPetByID(req, res) {
+  pets.fetchById(req.params.petID, (err, data) => {
+    res.status(200).send(data);
+  });
+}
+
+module.exports = {
+  welcome,
+  getAllOwners,
+  getOwnerByID,
+  getOwnersPets,
+  getPetByID
+};

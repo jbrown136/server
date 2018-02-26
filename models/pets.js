@@ -1,12 +1,16 @@
-const fs = require('fs');
+const fs = require("fs");
 module.exports = {
-  create (ownerId, data, cb) {
-      
+  create(ownerId, data, cb) {},
+  fetchById(id, cb) {
+    fs.access(`./data/pets/${id}.json`, fs.constants.F_OK, err => {
+      if (err) cb(null, `${id} does not exist`);
+      fs.readFile(`./data/pets/${id}.json`, "utf8", (err, data) => {
+        if (err) console.log("ERROR!");
+        cb(null, JSON.parse(data));
+      });
+    });
   },
-  fetchById (id, cb) {
-        
-  },
-  fetchByOwnerId (ownerId, cb) {
+  fetchByOwnerId(ownerId, cb) {
     const pets = [];
     let count = 0;
     fs.readdir("./data/pets", (err, data) => {
@@ -22,7 +26,5 @@ module.exports = {
       });
     });
   },
-  deleteById (id, cb) {
-
-  }
+  deleteById(id, cb) {}
 };
