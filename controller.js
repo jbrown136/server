@@ -1,17 +1,20 @@
 const owners = require("./models/owners");
 const pets = require("./models/pets");
+
 function welcome(req, res) {
   res.status(200).send("Welcome to our API");
 }
 
-function getAllOwners(req, res) {
+function getAllOwners(req, res, next) {
   owners.fetchAll((err, data) => {
+    if (err) next(err);
     res.status(200).send(data);
   });
 }
 
-function getOwnerByID(req, res) {
+function getOwnerByID(req, res, next) {
   owners.fetchById(req.params.ownerID, (err, data) => {
+    if (err) next(err);
     res.status(200).send(data);
   });
 }
@@ -65,13 +68,13 @@ function postPet(req, res) {
   }
 }
 
-function deletePet (req, res) {
+function deletePet(req, res) {
   pets.deleteById(req.params.petID, (err, data) => {
     res.status(200).send(data);
   });
 }
 
-function deleteOwner (req, res) {
+function deleteOwner(req, res) {
   owners.deleteById(req.params.ownerID, (err, data) => {
     res.status(200).send(data);
   });

@@ -32,11 +32,17 @@ module.exports = {
   },
   fetchById(id, cb) {
     fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, err => {
-      if (err) cb(null, `${id} does not exist`);
-      fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
-        if (err) console.log("ERROR!");
-        cb(null, JSON.parse(data));
-      });
+      if (err) {
+        cb({ message: `${id} does not exist`, status: 418 });
+      } else
+        fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
+          if (err)
+            cb({
+              message: `${id} does not exist`,
+              status: 418
+            });
+          else cb(null, JSON.parse(data));
+        });
     });
   },
   update(id, data, cb) {
@@ -58,32 +64,30 @@ module.exports = {
     });
   },
   deleteById(id, cb) {
-    fs.access ( `./data/owners/${id}.json`,fs.constants.F_OK, err => {
+    fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, err => {
       if (err) cb(null, `${id} does not exist`);
       else {
-        
         fs.readdir("./data/pets", (err, petArray) => {
-          
           let count = 0;
           petArray.forEach(pet => {
             count++;
-            fs.readFile(`./data/pets/${pet}`, (err, petData) =>{
+            fs.readFile(`./data/pets/${pet}`, (err, petData) => {
               petData = JSON.parse(petData);
               console.log(petData.owner);
-              if(petData.owner === id) {
-                fs.unlink(`./data/pets/${pet}`, (err) => {
-                  if  (err) console.log( "oops!");
+              if (petData.owner === id) {
+                fs.unlink(`./data/pets/${pet}`, err => {
+                  if (err) console.log("oops!");
                 });
               }
-            }); 
-            if( count === petArray.length) {
-              fs.unlink(`./data/owners/${id}.json`, (err) => {
-                if  (err) console.log( "cannot delete owner!");
+            });
+            if (count === petArray.length) {
+              fs.unlink(`./data/owners/${id}.json`, err => {
+                if (err) console.log("cannot delete owner!");
                 cb(null, "delete successful");
               });
             }
           });
-        }); 
+        });
       }
     });
   }

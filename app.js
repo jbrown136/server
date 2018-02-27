@@ -1,34 +1,15 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const app = express();
-const {
-  welcome,
-  getAllOwners,
-  getOwnerByID,
-  getOwnersPets,
-  getPetByID,
-  patchOwner,
-  postOwner,
-  postPet,
-  deletePet,
-  deleteOwner
-} = require("./controller.js");
+const bodyParser = require("body-parser");
+const apiRouter = require("./routers/api");
 
 app.use(bodyParser.json());
 
-app.get("/api/", welcome);
-app.get("/api/owners/", getAllOwners);
-app.get("/api/owners/:ownerID", getOwnerByID);
-app.get("/api/owners/:ownerID/pets", getOwnersPets);
-app.get("/api/pets/:petID", getPetByID);
+app.use("/api", apiRouter);
 
-app.patch("/api/owners/:ownerID", patchOwner);
-
-app.post("/api/owners/", postOwner);
-app.post("/api/pets/", postPet);
-
-app.delete("/api/pets/:petID", deletePet);
-app.delete("/api/owners/:ownerID", deleteOwner);
+app.use((err, req, res, next) => {
+  res.status(err.status).send(err.message);
+});
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
