@@ -57,5 +57,34 @@ module.exports = {
       });
     });
   },
-  deleteById(id, cb) {}
+  deleteById(id, cb) {
+    fs.access ( `./data/owners/${id}.json`,fs.constants.F_OK, err => {
+      if (err) cb(null, `${id} does not exist`);
+      else {
+        
+        fs.readdir("./data/pets", (err, petArray) => {
+          
+          let count = 0;
+          petArray.forEach(pet => {
+            count++;
+            fs.readFile(`./data/pets/${pet}`, (err, petData) =>{
+              petData = JSON.parse(petData);
+              console.log(petData.owner);
+              if(petData.owner === id) {
+                fs.unlink(`./data/pets/${pet}`, (err) => {
+                  if  (err) console.log( "oops!");
+                });
+              }
+            }); 
+            if( count === petArray.length) {
+              fs.unlink(`./data/owners/${id}.json`, (err) => {
+                if  (err) console.log( "cannot delete owner!");
+                cb(null, "delete successful");
+              });
+            }
+          });
+        }); 
+      }
+    });
+  }
 };
