@@ -31,9 +31,17 @@ function getPetByID(req, res) {
 }
 
 function patchOwner(req, res) {
-  owners.update(req.params.ownerID, req.body, (err, data) => {
+  owners.update(req.params.ownerID, req.body, () => {
     res.status(200).send(`${req.params.ownerID} has been updated!`);
   });
+}
+
+function postOwner (req, res) {
+  req.body.id = Date.now();
+  console.log(req.body.id);
+  owners.create(req.body, (err) =>{
+    res.status(200).send("An owner has been created!");
+  })
 }
 
 module.exports = {
@@ -42,5 +50,6 @@ module.exports = {
   getOwnerByID,
   getOwnersPets,
   getPetByID,
-  patchOwner
+  patchOwner,
+  postOwner
 };
