@@ -48,10 +48,21 @@ function postOwner(req, res) {
 }
 
 function postPet(req, res) {
-  req.body.id = Date.now();
-  pets.create(req.body, err => {
-    res.status(200).send("A pet has been created!");
-  });
+  if (
+    !req.body.name ||
+    !req.body.avatarUrl ||
+    !req.body.favouriteFood ||
+    !req.body.owner
+  ) {
+    res
+      .status(418)
+      .send("Pets require name, avatarUrl, favouriteFood and an owner");
+  } else {
+    req.body.id = Date.now();
+    pets.create(req.body.owner, req.body, (err, data) => {
+      res.status(200).send(data);
+    });
+  }
 }
 
 module.exports = {
