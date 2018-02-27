@@ -2,13 +2,17 @@ const fs = require("fs");
 module.exports = {
   create(data, cb) {
     const newOwner = {
-      "id": data.id,
-      "name": data.name,
-      "age": data.age
+      id: data.id,
+      name: data.name,
+      age: data.age
     };
-    fs.writeFile(`./data/owners/${data.id}.json`, JSON.stringify(newOwner), err =>{
-      cb(null);
-    });
+    fs.writeFile(
+      `./data/owners/${data.id}.json`,
+      JSON.stringify(newOwner),
+      err => {
+        cb(null);
+      }
+    );
   },
   fetchAll(cb) {
     const owners = [];
@@ -41,11 +45,15 @@ module.exports = {
       fs.readFile(`./data/owners/${id}.json`, "utf8", (err, ownerDetails) => {
         ownerDetails = JSON.parse(ownerDetails);
         const keys = Object.keys(data);
-        ownerDetails[keys[0]] = data[keys[0]];
-        fs.writeFile(`./data/owners/${id}.json`, JSON.stringify(ownerDetails), err => {
-          if (err) console.log("oh noooooo");
-          cb();
-        });
+        keys.forEach(key => (ownerDetails[key] = data[key]));
+        fs.writeFile(
+          `./data/owners/${id}.json`,
+          JSON.stringify(ownerDetails),
+          err => {
+            if (err) console.log("oh noooooo");
+            cb();
+          }
+        );
       });
     });
   },

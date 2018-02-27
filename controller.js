@@ -36,12 +36,22 @@ function patchOwner(req, res) {
   });
 }
 
-function postOwner (req, res) {
+function postOwner(req, res) {
   req.body.id = Date.now();
-  console.log(req.body.id);
-  owners.create(req.body, (err) =>{
-    res.status(200).send("An owner has been created!");
-  })
+  if (req.body.name === undefined || req.body.age === undefined) {
+    res.status(418).send("Owner requires both name and age");
+  } else {
+    owners.create(req.body, err => {
+      res.status(200).send("An owner has been created!");
+    });
+  }
+}
+
+function postPet(req, res) {
+  req.body.id = Date.now();
+  pets.create(req.body, err => {
+    res.status(200).send("A pet has been created!");
+  });
 }
 
 module.exports = {
@@ -51,5 +61,6 @@ module.exports = {
   getOwnersPets,
   getPetByID,
   patchOwner,
-  postOwner
+  postOwner,
+  postPet
 };
