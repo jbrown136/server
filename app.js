@@ -9,7 +9,8 @@ const {
   getPetByID,
   patchOwner,
   postOwner,
-  postPet
+  postPet,
+  deletePet
 } = require("./controller.js");
 
 app.use(bodyParser.json());
@@ -24,6 +25,8 @@ app.patch("/api/owners/:ownerID", patchOwner);
 
 app.post("/api/owners/", postOwner);
 app.post("/api/pets/", postPet);
+
+app.delete("/api/pets/:petID", deletePet)
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");

@@ -46,5 +46,12 @@ module.exports = {
       });
     });
   },
-  deleteById(id, cb) {}
+  deleteById(id, cb) {
+    fs.access( `./data/pets/${id}.json`, fs.constants.F_OK, err => {
+      if (err) cb(null, `${id} does not exist`);
+      else fs.unlink(`./data/pets/${id}.json`, (err, data) =>{
+        cb(null, `${id} has been deleted`);
+      });
+    });
+  }
 };

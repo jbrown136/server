@@ -65,6 +65,11 @@ function postPet(req, res) {
   }
 }
 
+function deletePet (req, res) {
+  pets.deleteById(req.params.petID, (err, data) => {
+    res.status(200).send(data);
+  });
+}
 module.exports = {
   welcome,
   getAllOwners,
@@ -73,5 +78,6 @@ module.exports = {
   getPetByID,
   patchOwner,
   postOwner,
-  postPet
+  postPet,
+  deletePet
 };
