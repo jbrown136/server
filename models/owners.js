@@ -32,9 +32,8 @@ module.exports = {
   },
   fetchById(id, cb) {
     fs.access(`./data/owners/${id}.json`, fs.constants.F_OK, err => {
-      if (err) {
-        cb({ message: `${id} does not exist`, status: 418 });
-      } else
+      if (err) cb(err);
+      else
         fs.readFile(`./data/owners/${id}.json`, "utf8", (err, data) => {
           if (err)
             cb({

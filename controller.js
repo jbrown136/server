@@ -14,15 +14,17 @@ function getAllOwners(req, res, next) {
 
 function getOwnerByID(req, res, next) {
   owners.fetchById(req.params.ownerID, (err, data) => {
-    if (err) next(err);
+    if (err) next({ message: `${req.params.ownerID} does not exist`, status: 418 });
+    
     res.status(200).send(data);
   });
 }
 
-function getOwnersPets(req, res) {
+function getOwnersPets(req, res, next) {
   pets.fetchByOwnerId(req.params.ownerID, (err, data) => {
-    if (data.length === 0)
-      res.status(404).send(`No pets found for ${req.params.ownerID}`);
+    if(err) next({ message: `No pets found for ${req.params.ownerID}`, status: 418 });
+    // if (data.length === 0)
+    //   res.status(404).send(`No pets found for ${req.params.ownerID}`);
     else res.status(200).send(data);
   });
 }

@@ -48,8 +48,9 @@ module.exports = {
   },
   deleteById(id, cb) {
     fs.access( `./data/pets/${id}.json`, fs.constants.F_OK, err => {
-      if (err) cb(null, `${id} does not exist`);
+      if (err) cb(err);
       else fs.unlink(`./data/pets/${id}.json`, (err) =>{
+        if (err) cb(err);
         cb(null, `${id} has been deleted`);
       });
     });
